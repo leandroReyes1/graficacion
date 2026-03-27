@@ -1,0 +1,100 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graficación - Leandro Reyes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style/index.css">
+    </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Graficación</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Abrir</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Visualizar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Expand</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  About
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#">Development Team </a></li>
+                  <li><a class="dropdown-item" href="#">Version</a></li>
+                  <li><a class="dropdown-item" href="#">Contact</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="card text-center">
+        <div class="card-header">
+          Canvas de visualización
+        </div>
+        
+        <div class="chart card-img-bottom">
+            <canvas id="circlechart" width="640" height="480" style="border: 1px solid #eee;"></canvas>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title">Graficador Matemático</h5>
+          <p class="card-text">Esta es el área de dibujo disponible.</p>
+          
+          <div class="container">
+              <div class="row justify-content-center">
+                  <div class="col-md-6">
+                      <div class="input-group mb-3">
+                          <span class="input-group-text">f(x) =</span>
+                          <input type="text" id="funcInput" class="form-control" value="x * x" placeholder="Ejemplo: Math.sin(x)">
+                          <button class="btn btn-primary" type="button" id="btnDibujar">Graficar</button>
+                      </div>
+                      <small class="text-muted">Usa "x" como variable (ej. x*x, Math.cos(x), Math.pow(x,3))</small>
+                  </div>
+              </div>
+          </div>
+          
+        </div>
+        
+        <div class="card-footer text-muted">
+          Última actualización: Hoy
+        </div>
+      </div>
+
+      <footer id="footer" class="pb-4 pt-4">
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-12 col-lg">
+              <a href="https://github.com/leandroReyes1/graficacion.git">Repositorio Principal </a>
+            </div>
+            <div class="col-12 col-lg">
+              <a href="#">Contáctanos</a>
+            </div>
+            <div class="col-12 col-lg">
+              <a href="#">Estudiantes</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
+      </script>
+      
+      <script src="./dist/src/index.js" type="module"></script>
+  </body>
+</html>
