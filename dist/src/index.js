@@ -4,12 +4,11 @@ const canvas = document.getElementById('circlechart');
 const graphics = canvas.getContext('2d');
 const miCanvas = new CanvasLocal(graphics, canvas);
 
-// Inicia vacío
-document.getElementById('funcInput').value = ""; 
+// Dibujo inicial al cargar la página
 miCanvas.paint();
 
+// Evento para el botón
 document.getElementById('btnDibujar').addEventListener('click', () => {
-    const formula = document.getElementById('funcInput').value;
-    miCanvas.setFuncion(formula);
+    // Simplemente llamamos a paint, la clase ya sabe leer el input
     miCanvas.paint();
 });

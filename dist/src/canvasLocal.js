@@ -1,16 +1,20 @@
 export class CanvasLocal {
     constructor(g, canvas) {
         this.graphics = g;
+        this.canvas = canvas;
+        this.rWidth = 12;
+        this.rHeight = 8;
         this.maxX = canvas.width - 1;
         this.maxY = canvas.height - 1;
-        this.centerX = this.maxX / 2;
-        this.centerY = this.maxY / 2;
+        this.pixelSize = Math.max(this.rWidth / this.maxX, this.rHeight / this.maxY);
+        
+        // Margen para etiquetas a la izquierda
+        this.centerX = this.maxX / 12 * 2.5; 
+        this.centerY = this.maxY / 8 * 7;
     }
 
-    // Transformación para centrar y ajustar coordenadas (opcional, pero ayuda)
-    // En este caso, usaremos coordenadas directas del canvas para simplificar
-    iX(x) { return Math.round(x); }
-    iY(y) { return this.maxY - Math.round(y); } // Invierte el eje Y para que suba
+    iX(x) { return Math.round(this.centerX + x / this.pixelSize); }
+    iY(y) { return Math.round(this.centerY - y / this.pixelSize); }
 
     drawLine(x1, y1, x2, y2) {
         this.graphics.beginPath();
@@ -19,44 +23,69 @@ export class CanvasLocal {
         this.graphics.stroke();
     }
 
-    paint() {
-    let side = Math.min(this.maxX, this.maxY) * 0.8;
-    let offset = (this.maxX - side) / 2;
-    
-    // 1. Vértices del cuadrado inicial
-    let xA = offset,        yA = offset;
-    let xB = offset + side, yB = offset;
-    let xC = offset + side, yC = offset + side;
-    let xD = offset,        yD = offset + side;
-
-    let q = 0.05; // Factor de desplazamiento
-    let p = 1 - q;
-
-    for (let i = 0; i < 15; i++) {
-        // 2. Dibujar las 4 líneas del cuadrado actual
-        this.drawLine(xA, yA, xB, yB);
-        this.drawLine(xB, yB, xC, yC);
-        this.drawLine(xC, yC, xD, yD);
-        this.drawLine(xD, yD, xA, yA);
-
-        // 3. Calcular nuevos vértices (Interpolación lineal)
-        let xA1 = p * xA + q * xB;
-        let yA1 = p * yA + q * yB;
-        
-        let xB1 = p * xB + q * xC;
-        let yB1 = p * yB + q * yC;
-        
-        let xC1 = p * xC + q * xD;
-        let yC1 = p * yC + q * yD;
-        
-        let xD1 = p * xD + q * xA;
-        let yD1 = p * yD + q * yA;
-
-        // Actualizar para la siguiente vuelta
-        xA = xA1; yA = yA1;
-        xB = xB1; yB = yB1;
-        xC = xC1; yC = yC1;
-        xD = xD1; yD = yD1;
+    // LEE LOS DATOS DIRECTO DE LA PANTALLA
+    getDatosDesdePantalla() {
+        const input = document.getElementById('funcInput');
+        if (input && input.value.trim() !== "") {
+            return input.value.split(',').map(Number).filter(n => !isNaN(n));
+        }
+        return [10, 20, 30]; // Valores por defecto
     }
-}
+
+    maxH(h) {
+        let max = Math.max(...h);
+        let pot = 10;
+        while (pot < max) pot *= 10;
+        pot /= 10;
+        return Math.ceil(max / pot) * pot;
+    }
+
+    paint() {
+        this.graphics.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        let h = this.getDatosDesdePantalla();
+        let maxEsc = this.maxH(h);
+        let colors = ['magenta', 'red', 'green', 'yellow', 'blue', 'orange', 'cyan'];
+        
+        // Ejes
+        this.graphics.strokeStyle = 'black';
+        this.drawLine(this.iX(0), this.iY(0), this.iX(0), this.iY(6)); // Y
+        this.drawLine(this.iX(0), this.iY(0), this.iX(8), this.iY(0)); // X
+
+        // Escala numérica horizontal
+        for (let i = 0; i <= 4; i++) {
+            let val = (maxEsc * i) / 4;
+            this.graphics.strokeText(val.toString(), this.iX((i * 8) / 4) - 10, this.iY(-0.5));
+        }
+
+        let ancho = 0.5;
+        let espacio = 6 / h.length;
+
+        h.forEach((valor, ind) => {
+            let yPos = ind * espacio + 0.3;
+            let largo = (valor * 8) / maxEsc;
+            let colorActual = colors[ind % colors.length];
+
+            this.graphics.fillStyle = colorActual;
+            
+            // CARA FRONTAL
+            this.graphics.fillRect(this.iX(0), this.iY(yPos + ancho), this.iX(largo) - this.iX(0), this.iY(yPos) - this.iY(yPos + ancho));
+            this.graphics.strokeRect(this.iX(0), this.iY(yPos + ancho), this.iX(largo) - this.iX(0), this.iY(yPos) - this.iY(yPos + ancho));
+
+            // EFECTO 3D (Tapas)
+            let p = 0.3;
+            this.graphics.beginPath();
+            this.graphics.moveTo(this.iX(largo), this.iY(yPos));
+            this.graphics.lineTo(this.iX(largo + p), this.iY(yPos + p));
+            this.graphics.lineTo(this.iX(largo + p), this.iY(yPos + ancho + p));
+            this.graphics.lineTo(this.iX(largo), this.iY(yPos + ancho));
+            this.graphics.fill();
+            this.graphics.stroke();
+
+            // ETIQUETAS
+            this.graphics.fillStyle = 'black';
+            this.graphics.fillText(colorActual, this.iX(-2.2), this.iY(yPos + 0.15));
+            this.graphics.fillText(valor.toString(), this.iX(largo + 0.5), this.iY(yPos + 0.15));
+        });
+    }
 }
