@@ -975,22 +975,26 @@ export class CanvasLocal {
       }
     }
 
+    // Factor de multiplicación de velocidad (con base en la velocidad original 0.03)
+    const multiplier = this.animSpeed / 0.03;
+
     // Actualizar cada grupo de forma independiente
     this.groupConfigs.forEach(config => {
       if (config.type === 'spin') {
-        config.currentVal += config.speed;
+        config.currentVal += config.speed * multiplier;
         if (config.currentVal > Math.PI * 2) {
           config.currentVal -= Math.PI * 2;
         }
       } else if (config.type === 'swing') {
         const maxValRad = config.maxVal * Math.PI / 180;
         const targetVal = config.targetState === 'open' ? maxValRad : 0;
-
+        const step = config.speed * multiplier;
+        
         if (config.currentVal < targetVal) {
-          config.currentVal += config.speed;
+          config.currentVal += step;
           if (config.currentVal > targetVal) config.currentVal = targetVal;
         } else if (config.currentVal > targetVal) {
-          config.currentVal -= config.speed;
+          config.currentVal -= step;
           if (config.currentVal < targetVal) config.currentVal = targetVal;
         }
 
@@ -1002,12 +1006,13 @@ export class CanvasLocal {
         }
       } else if (config.type === 'slide') {
         const targetVal = config.targetState === 'open' ? config.maxVal : 0;
-
+        const step = config.speed * multiplier;
+        
         if (config.currentVal < targetVal) {
-          config.currentVal += config.speed;
+          config.currentVal += step;
           if (config.currentVal > targetVal) config.currentVal = targetVal;
         } else if (config.currentVal > targetVal) {
-          config.currentVal -= config.speed;
+          config.currentVal -= step;
           if (config.currentVal < targetVal) config.currentVal = targetVal;
         }
       }
