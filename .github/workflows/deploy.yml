@@ -3,6 +3,7 @@ name: Deploy Static Content to GitHub Pages
 on:
   push:
     branches:
+      - main
       - modelado-3d-proyecto-final
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
