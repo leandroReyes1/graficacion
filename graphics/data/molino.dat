@@ -1,0 +1,51 @@
+# Modelo 3D de un Molino con Aspas Móviles
+# Formato: 
+# V [id] [x] [y] [z] [grupo]
+# F [v1] [v2] ... [grupo_vinc] [color_hex]
+# E [v1] [v2] [grupo_vinc] [color_hex]
+
+# --- VERTICES DE LA BASE (ESTATICA) ---
+V 1 -0.5 -1.5 -0.5 base
+V 2  0.5 -1.5 -0.5 base
+V 3  0.5 -1.5  0.5 base
+V 4 -0.5 -1.5  0.5 base
+V 5 -0.25 1.2 -0.25 base
+V 6  0.25 1.2 -0.25 base
+V 7  0.25 1.2  0.25 base
+V 8 -0.25 1.2  0.25 base
+
+# --- VERTICES DE LAS ASPAS (GRUPO MOVIL: 'aspas') ---
+# Pivote central en (0.0, 1.2, 0.3)
+V 9  0.0  1.2  0.35 aspas
+# Aspa 1 (Arriba)
+V 10  0.15 2.2  0.35 aspas
+V 11 -0.15 2.2  0.35 aspas
+# Aspa 2 (Derecha)
+V 12  1.0  1.35 0.35 aspas
+V 13  1.0  1.05 0.35 aspas
+# Aspa 3 (Abajo)
+V 14 -0.15 0.2  0.35 aspas
+V 15  0.15 0.2  0.35 aspas
+# Aspa 4 (Izquierda)
+V 16 -1.0  1.05 0.35 aspas
+V 17 -1.0  1.35 0.35 aspas
+
+# --- CARAS DE LA BASE (COLOR GRIS CON ESTRUCTURA) ---
+F 1 2 3 4 base #2d3748
+F 5 6 7 8 base #4a5568
+F 1 2 6 5 base #1a202c
+F 2 3 7 6 base #2d3748
+F 3 4 8 7 base #1a202c
+F 4 1 5 8 base #2d3748
+
+# --- CARAS DE LAS ASPAS (COLORES LLAMATIVOS) ---
+F 9 10 11 aspas #ff5555
+F 9 12 13 aspas #55ff55
+F 9 14 15 aspas #5555ff
+F 9 16 17 aspas #ffff55
+
+# --- BORDES DEL MOLINO (OPCIONALES PARA DAR DETALLE) ---
+E 9 10 aspas #ffffff
+E 9 12 aspas #ffffff
+E 9 14 aspas #ffffff
+E 9 16 aspas #ffffff

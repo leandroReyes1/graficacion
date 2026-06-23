@@ -1,46 +1,137 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="es">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Graficación - Leandro Reyes</title>
+    <title>Visualizador 3D Interactivo</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./style/index.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Graficación UABJO</a>
+
+<body class="bg-dark text-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-card border-bottom border-secondary mb-4 py-3 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <span class="text-primary me-2">●</span> Visualizador 3D
+            </a>
         </div>
     </nav>
 
-    <div class="card text-center">
-        <div class="card-header">Canvas de visualización</div>
-        <div class="chart card-img-bottom">
-            <canvas id="circlechart" width="640" height="480" style="border: 1px solid #eee;"></canvas>
-        </div>
-
-        <div class="card-body">
-            <h5 class="card-title">Graficador de Barras Horizontales 3D</h5>
-            <p class="card-text">Ingresa los valores numéricos separados por comas.</p>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Datos:</span>
-                            <input type="text" id="funcInput" class="form-control" value="45, 12, 88, 30, 65, 10, 95">
-                            <button class="btn btn-primary" type="button" id="btnDibujar">Graficar</button>
+    <!-- Main Container -->
+    <div class="container pb-5">
+        <div class="row g-4">
+            <!-- Panel Lateral de Controles -->
+            <div class="col-lg-4">
+                <div class="card bg-dark-card text-light border-secondary shadow-lg h-100 glass-card">
+                    <div class="card-header border-secondary bg-primary-gradient py-3">
+                        <h5 class="card-title mb-0 fw-bold text-white">Controles del Modelo</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Cargar Archivo -->
+                        <div class="mb-3">
+                            <label for="fileInput" class="form-label text-info fw-bold mb-2">1. Cargar Archivo (.dat /
+                                .txt)</label>
+                            <input type="file" id="fileInput" class="form-control bg-dark text-light border-secondary"
+                                accept=".dat,.txt,.obj">
+                            <div class="form-text text-muted mt-2">Sube un modelo 3D con formato de vértices y caras.
+                            </div>
                         </div>
-                        <small class="text-muted">Ejemplo: 10, 50, 20, 80</small>
+
+                        <hr class="border-secondary my-2">
+
+                        <!-- Cámara -->
+                        <div class="mb-3">
+                            <h6 class="text-info fw-bold mb-3">2. Zoom (Escala)</h6>
+                            <div class="mb-3">
+                                <input type="range" id="zoomSlider" class="form-range" min="30" max="250" value="120">
+                            </div>
+                        </div>
+
+                        <hr class="border-secondary my-2">
+
+                        <!-- Animación -->
+                        <div class="mb-3">
+                            <h6 class="text-info fw-bold mb-3">3. Control de Velocidad</h6>
+                            <div class="d-grid gap-2 mb-3">
+                                <button id="btnPlayPause" class="btn btn-primary fw-bold">Pausar</button>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label class="form-label mb-0">Velocidad</label>
+                                    <span class="text-muted fw-bold"><span id="lblSpeed">1.0x</span></span>
+                                </div>
+                                <input type="range" id="speedSlider" class="form-range" min="0" max="100" value="30">
+                            </div>
+                        </div>
+
+                        <hr class="border-secondary my-3">
+
+                        <!-- Componentes y Animaciones -->
+                        <div class="mb-3">
+                            <h6 class="text-info fw-bold mb-3">4. Componentes y Animaciones</h6>
+                            <p class="text-muted small mb-2">Haz clic en una pieza del modelo en el visor 3D para interactuar, o configúrala aquí:</p>
+                            <div id="componentsPanel" class="accordion accordion-flush" style="max-height: 380px; overflow-y: auto; padding-right: 4px;">
+                                <p class="text-muted small text-center py-3">Carga un modelo estructurado para ver sus componentes.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas de Visualización y Visor de Coordenadas -->
+            <div class="col-lg-8">
+                <!-- Tarjeta del Canvas -->
+                <div class="card bg-dark-card border-secondary mb-4 shadow-lg canvas-card">
+                    <div class="card-header bg-dark-card border-secondary py-3">
+                        <span class="badge bg-primary text-uppercase px-3 py-2 fw-bold">Entorno 3D</span>
+                    </div>
+                    <div class="card-body p-0 bg-black text-center position-relative rounded-bottom"
+                        style="min-height: 480px; overflow: hidden;">
+                        <canvas id="circlechart" width="760" height="480"
+                            style="display: block; margin: 0 auto; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tarjeta del Visor de Coordenadas -->
+                <div class="card bg-dark-card text-light border-secondary shadow-lg">
+                    <div
+                        class="card-header bg-dark-card border-secondary py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-info">Visor de Coordenadas en Tiempo Real</h6>
+                        <span class="badge bg-secondary" id="lblStats">Cargado</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <pre id="coordinatesDisplay" class="mb-0 p-3 bg-dark text-light border-0"
+                            style="max-height: 280px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; text-align: left; line-height: 1.45; color: #68d391 !important;"></pre>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer text-muted">Última actualización: Hoy</div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-dark-card text-muted py-4 border-top border-secondary mt-5">
+        <div class="container text-center">
+            <p class="mb-1 text-light">Visualizador de Modelos 3D</p>
+            <p class="mb-2 text-muted small">MATERIA: Graficación</p>
+            <p class="mb-2 text-muted small">PRESENTA:Jaime Leandro Juarez Reyes</p>
+            <p class="mb-2 text-muted small">MAESTRO:Jorge Cruz Perez</p>
+            <p class="mb-0"><a href="https://github.com/leandroReyes1/graficacion.git"
+                    class="text-primary text-decoration-none">Ver Repositorio Principal en GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./dist/src/index.js" type="module"></script>
 </body>
+
 </html>

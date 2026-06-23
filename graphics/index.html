@@ -1,86 +1,126 @@
 <!doctype html>
-<html class="no-js" lang="en">
-  <head>
+<html class="no-js" lang="es">
+
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation Starter Template</title>
-    <!-- Compressed CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" 
-        rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>Visualizador 3D Interactivo - UABJO</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./style/index.css">
-    </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Graficación</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Abrir</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Vizualizar</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Expand</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  About
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Development Team </a></li>
-                  <li><a class="dropdown-item" href="#">Version</a></li>
-                  <li><a class="dropdown-item" href="#">Contact</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
 
-      <div class="card text-center">
-        <div class="card-header">
-          Canvas de vizualizaion
-        </div>
-        <div class="chart card-img-bottom">
-            <canvas id="circlechart" width="640" height="480"></canvas>
-          </div>
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">Está es el área de dibujo dosponible.</p>
-          
-          
-        </div>
-        
-        <div class="card-footer text-muted">
-          2 days ago
-        </div>
-      </div>
-
-      <footer id="footer" class="pb-4 pt-4">
+<body class="bg-dark text-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-card border-bottom border-secondary mb-4 py-3 shadow-sm">
         <div class="container">
-          <div class="row text-center">
-            <div class="col-12 col-lg">
-              <a href="https://github.com/jorrgeCruz/graphics">Repositorio Principal </a>
-            </div>
-            <div class="col-12 col-lg">
-              <a href="#">Contáctanos</a>
-            </div>
-            <div class="col-12 col-lg">
-              <a href="#">Estudiantes</a>
-            </div>
-          </div>
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <span class="text-primary me-2">●</span> Visualizador 3D con Piezas Móviles
+            </a>
         </div>
-      </footer>
-     <!-- Compressed JavaScript -->
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
-    </script>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container pb-5">
+        <div class="row g-4">
+            <!-- Panel Lateral de Controles -->
+            <div class="col-lg-4">
+                <div class="card bg-dark-card text-light border-secondary shadow-lg h-100 glass-card">
+                    <div class="card-header border-secondary bg-primary-gradient py-3">
+                        <h5 class="card-title mb-0 fw-bold text-white">Controles del Modelo</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Cargar Archivo -->
+                        <div class="mb-3">
+                            <label for="fileInput" class="form-label text-info fw-bold mb-2">1. Cargar Archivo (.dat /
+                                .txt)</label>
+                            <input type="file" id="fileInput" class="form-control bg-dark text-light border-secondary"
+                                accept=".dat,.txt">
+                            <div class="form-text text-muted mt-2">Sube un modelo 3D con formato de vértices y caras.
+                            </div>
+                        </div>
+
+                        <hr class="border-secondary my-2">
+
+                        <!-- Cámara -->
+                        <div class="mb-3">
+                            <h6 class="text-info fw-bold mb-3">2. Zoom (Escala)</h6>
+                            <div class="mb-3">
+                                <input type="range" id="zoomSlider" class="form-range" min="30" max="250" value="120">
+                            </div>
+                        </div>
+
+                        <hr class="border-secondary my-2">
+
+                        <!-- Animación -->
+                        <div class="mb-3">
+                            <h6 class="text-info fw-bold mb-3">3. Controles de Animación</h6>
+                            <div class="d-grid gap-2 mb-3">
+                                <button id="btnPlayPause" class="btn btn-primary fw-bold">Pausar</button>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label class="form-label mb-0">Velocidad</label>
+                                    <span class="text-muted fw-bold"><span id="lblSpeed">1.0x</span></span>
+                                </div>
+                                <input type="range" id="speedSlider" class="form-range" min="0" max="100" value="30">
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas de Visualización y Visor de Coordenadas -->
+            <div class="col-lg-8">
+                <!-- Tarjeta del Canvas -->
+                <div class="card bg-dark-card border-secondary mb-4 shadow-lg canvas-card">
+                    <div class="card-header bg-dark-card border-secondary py-3">
+                        <span class="badge bg-primary text-uppercase px-3 py-2 fw-bold">Entorno 3D</span>
+                    </div>
+                    <div class="card-body p-0 bg-black text-center position-relative rounded-bottom"
+                        style="min-height: 480px; overflow: hidden;">
+                        <canvas id="circlechart" width="760" height="480"
+                            style="display: block; margin: 0 auto; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tarjeta del Visor de Coordenadas -->
+                <div class="card bg-dark-card text-light border-secondary shadow-lg">
+                    <div
+                        class="card-header bg-dark-card border-secondary py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-info">Visor de Coordenadas en Tiempo Real</h6>
+                        <span class="badge bg-secondary" id="lblStats">Cargado</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <pre id="coordinatesDisplay" class="mb-0 p-3 bg-dark text-light border-0"
+                            style="max-height: 280px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; text-align: left; line-height: 1.45; color: #68d391 !important;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-card text-muted py-4 border-top border-secondary mt-5">
+        <div class="container text-center">
+            <p class="mb-1 text-light">Visualizador de Modelos 3D</p>
+            <p class="mb-2 text-muted small">MATERIA: Graficación</p>
+            <p class="mb-2 text-muted small">PRESENTA:Jaime Leandro Juarez Reyes</p>
+            <p class="mb-0"><a href="https://github.com/leandroReyes1/graficacion.git"
+                    class="text-primary text-decoration-none">Ver Repositorio Principal en GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./dist/src/index.js" type="module"></script>
-  </body>
+</body>
+
 </html>

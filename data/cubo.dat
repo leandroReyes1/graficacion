@@ -1,0 +1,22 @@
+# Modelo 3D de un Cubo Estático de Prueba
+# Formato: 
+# V [id] [x] [y] [z] [grupo]
+# F [v1] [v2] ... [grupo_vinc] [color_hex]
+
+# --- VERTICES DEL CUBO ---
+V 1 -1.0 -1.0 -1.0 cubo
+V 2  1.0 -1.0 -1.0 cubo
+V 3  1.0  1.0 -1.0 cubo
+V 4 -1.0  1.0 -1.0 cubo
+V 5 -1.0 -1.0  1.0 cubo
+V 6  1.0 -1.0  1.0 cubo
+V 7  1.0  1.0  1.0 cubo
+V 8 -1.0  1.0  1.0 cubo
+
+# --- CARAS DEL CUBO ---
+F 1 2 3 4 cubo #ff5555
+F 5 6 7 8 cubo #55ff55
+F 1 2 6 5 cubo #5555ff
+F 2 3 7 6 cubo #ffff55
+F 3 4 8 7 cubo #ff55ff
+F 4 1 5 8 cubo #55ffff
