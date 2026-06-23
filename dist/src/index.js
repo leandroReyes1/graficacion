@@ -339,8 +339,24 @@ function animationLoop() {
     }
     requestAnimationFrame(animationLoop);
 }
-// Inicialización
+// Inicialización y Carga de Modelo por Defecto (Ventilador)
 canvas.style.cursor = 'grab';
-updateUIFromModel();
-miCanvas.paint();
+fetch('./ventilador_estructurado_limpio.txt')
+    .then(response => {
+    if (!response.ok) {
+        throw new Error('No se pudo cargar el modelo por defecto');
+    }
+    return response.text();
+})
+    .then(text => {
+    miCanvas.loadModelFromText(text, 'ventilador_estructurado_limpio.txt');
+    updateUIFromModel();
+    rebuildComponentsPanel();
+    miCanvas.paint();
+})
+    .catch(err => {
+    console.warn('Advertencia al cargar modelo por defecto:', err);
+    updateUIFromModel();
+    miCanvas.paint();
+});
 animationLoop();
